@@ -5,7 +5,7 @@ from nemoguardrails import LLMRails, RailsConfig
 from nemoguardrails.actions import action
 from config import MODEL_NAME, TEMP
 from custom_llm import NeMoCompatibleGemini
-from rag_chain import ask_rag, init_rag_chain
+from rag_chain import ask_rag
 
 load_dotenv()
 
@@ -75,6 +75,82 @@ async def check_salary_regex_action(context: dict = None, text: str = None) -> b
         return False
 
 
+@action(name="check_input_for_salary", is_system_action=True)
+async def check_input_for_salary_action(context: dict = None, text: str = None) -> bool:
+    """Check if input contains salary-related keywords"""
+    try:
+        if text is None and context:
+            text = context.get("last_user_message", context.get("user_message", ""))
+
+        if not text or not isinstance(text, str):
+            return False
+
+        text_lower = text.lower()
+
+        # Maaş ile ilgili anahtar kelimeler (Türkçe ve İngilizce)
+        salary_keywords = [
+            # İngilizce
+            "salary",
+            "salaries",
+            "wage",
+            "wages",
+            "income",
+            "earn",
+            "earning",
+            "payroll",
+            "compensation",
+            "pay rate",
+            "pay scale",
+            "bonus",
+            "net income",
+            "gross income",
+            "financial",
+            "money",
+            "paid",
+            # Türkçe
+            "maaş",
+            "maas",
+            "ücret",
+            "ucret",
+            "gelir",
+            "kazanç",
+            "kazanc",
+            "ödeme",
+            "odeme",
+            "bordro",
+            "prim",
+            "zam",
+            "net gelir",
+            "brüt",
+            # CEO/Yönetici spesifik
+            "executive",
+            "manager salary",
+            "director salary",
+            "yönetici maaş",
+            "müdür maaş",
+            "patron",
+        ]
+
+        for keyword in salary_keywords:
+            if keyword in text_lower:
+                print(f"   🚨 Salary keyword detected in input: {keyword}")
+                return True
+
+        # Regex pattern for salary amounts
+        import re
+
+        salary_pattern = r"\d{2,3}[\.,]\d{3}\s*(TL|tl|₺|lira)"
+        if re.search(salary_pattern, text):
+            print(f"   🚨 Salary amount pattern detected in input")
+            return True
+
+        return False
+
+    except Exception as e:
+        print(f"   ❌ Input Check Error: {e}")
+        return False
+
+
 def main():
     print("🛡️  HR Guard Sistemi Başlatılıyor...\n")
 
@@ -99,14 +175,15 @@ def main():
         # Register actions
         app.register_action(call_rag_action, name="call_rag")
         app.register_action(check_salary_regex_action, name="check_salary_regex")
+        app.register_action(
+            check_input_for_salary_action, name="check_input_for_salary"
+        )
 
         print("✅ Action'lar kaydedildi")
 
         print("\n" + "=" * 50)
         print("✅ SİSTEM HAZIR! (Çıkmak için 'exit' yazın)")
         print("=" * 50 + "\n")
-        
-        chain = init_rag_chain()
 
         # Chat loop
         while True:

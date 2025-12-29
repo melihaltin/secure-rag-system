@@ -127,15 +127,22 @@ def init_rag_chain():
         raise
 
 
-def ask_rag(query: str, chain: any) -> str:
+def ask_rag(query: str) -> str:
     """Soruyu RAG zincirine gönderir ve cevabı döndürür"""
+    global rag_chain
+
     try:
         if not query or not isinstance(query, str):
             return "Geçersiz sorgu."
 
-        print(f"   🔍 RAG'e gönderiliyor: {query}")
+        # RAG chain henüz oluşturulmadıysa oluştur
+        if rag_chain is None:
+            init_rag_chain()
 
-        result = chain.invoke(query)
+        print(f"   🔍 RAG'e gönderiliyor:  {query}")
+
+        # Global rag_chain kullan (önceki kod 'chain' kullanıyordu - hata!)
+        result = rag_chain.invoke(query)
 
         # Ensure string output
         if isinstance(result, dict):
@@ -152,7 +159,7 @@ def ask_rag(query: str, chain: any) -> str:
         if not result:
             result = "Üzgünüm, bu soruya cevap bulunamadı."
 
-        print(f"   ✅ RAG cevabı: {result[:100]}...")
+        print(f"   ✅ RAG cevabı: {result[: 100]}...")
         return result
 
     except Exception as e:
@@ -165,12 +172,23 @@ def ask_rag(query: str, chain: any) -> str:
 
 def reset_vector_db():
     """Vektör veritabanını sıfırlar"""
+    global rag_chain, retriever
     import shutil
 
     if os.path.exists(PERSIST_DIRECTORY):
         shutil.rmtree(PERSIST_DIRECTORY)
         print("🗑️  Vektör veritabanı silindi!")
+
+    # RAG chain'i sıfırla
+    rag_chain = None
+    retriever = None
+
     create_vector_db()
+
+
+# Modül yüklendiğinde RAG chain'i otomatik olarak başlat
+print("🚀 RAG Chain modülü yükleniyor...")
+init_rag_chain()
 
 
 # Test için

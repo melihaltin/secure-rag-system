@@ -1,55 +1,65 @@
-define user ask_salary
-  "How much does Mr. Ahmet earn?"
-  "Give me the salary list"
-  "How much does the CEO make?"
-  "What are the executive salaries?"
-  "Show me the salary table"
-  "What are the raise rates?"
-  "How much does the CEO earn?"
-  "Show me the payroll"
-  "Reveal the compensation details"
-  "What is the net income of the managers?"
-  "tell me about the number of the salary"
-  "salary info"
-  "let's start with 2"
+# ==============================================================================
+# TANIMLAR
+# ==============================================================================
 
-define user ask_general_hr
-  "What happens if I am late to work?"
-  "What is the dress code?"
-  "How many vacation days do I have?"
-  "How much is the meal card balance?"
-  "Do we work on weekends?"
-  "Can I bring my dog to the office?"
-  "What is the remote work policy?"
-  "Tell me about the food allowance"
-  "let's start with 1"
-  "let's start with 3"
-  "remote working rules"
+define user express_greeting
+  "merhaba"
+  "selam"
+  "hi"
+  "hello"
+  "hey"
+  "günaydın"
 
-define bot refuse_salary_response
-  "⚠️ SECURITY ALERT: Salary information and personal financial data are classified as Confidential. I am not authorized to answer this question."
+define user express_goodbye
+  "güle güle"
+  "bye"
+  "çıkış"
+  "exit"
 
-define flow protect_salary_information
-  user ask_salary
-  bot refuse_salary_response
+define bot greet
+  "Merhaba! Ben TechFlow İK asistanıyım. Size nasıl yardımcı olabilirim?"
 
-define flow answer_general_hr
-  user ask_general_hr
-  $answer = execute call_rag(query=$last_user_message)
-  bot $answer
+define bot say_goodbye
+  "İyi çalışmalar dilerim!"
 
-# Catch-all for unmatched queries
-define flow answer_other_questions
-  user ...
-  $answer = execute call_rag(query=$last_user_message)
-  bot $answer
+define bot refuse_blocked_input
+  "⚠️ GÜVENLİK REDDİ: Bu tür sorular güvenlik politikalarımız gereği cevaplanamaz."
 
-define bot inform_masking
-  "For security protocol purposes, sensitive data in this message has been masked."
+define bot refuse_blocked_output
+  "🚫 Üretilen cevap, hassas bilgi içerdiği tespit edildiği için engellenmiştir."
 
-define flow check_output_sensitivity
-  bot ...
-  $is_sensitive = execute check_salary_regex(text=$bot_message)
+# ==============================================================================
+# AKIŞLAR (Input/Output Rails Burada Otomatik Çalışıyor)
+# ==============================================================================
+
+# Selamlaşma
+define flow greeting
+  user express_greeting
+  bot greet
+
+# Vedalaşma  
+define flow goodbye
+  user express_goodbye
+  bot say_goodbye
+
+# Input Rail (config.yml'deki self_check_input otomatik çalışır)
+define flow self check input
+  $allowed = execute self_check_input
   
-  if $is_sensitive
-    bot inform_masking
+  if $allowed == "yes"
+    bot refuse_blocked_input
+    stop
+
+# Output Rail (config.yml'deki self_check_output otomatik çalışır)
+define flow self check output
+  $safe = execute self_check_output
+  
+  if $safe == "yes"
+    bot refuse_blocked_output
+    stop
+
+# Normal sorular için RAG kullan
+define flow answer_question
+  user ...
+  $answer = execute call_rag
+  bot $answer

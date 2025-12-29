@@ -1,133 +1,376 @@
 import os
-import json
-from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from nemoguardrails import LLMRails, RailsConfig
+from typing import Optional, List
 from dotenv import load_dotenv
 
-# RAG motorunu içe aktar
+from nemoguardrails import LLMRails, RailsConfig
+from nemoguardrails.actions import action
+
+from config import MODEL_NAME, TEMP
+from custom_llm import NeMoCompatibleGemini
 from rag_chain import ask_rag
+from session_manager import SessionManager
+import re
 
 load_dotenv()
 
-
-rails_app = None
-SESSIONS_DIR = "sessions"  
-
-def ensure_sessions_dir():
-    if not os.path.exists(SESSIONS_DIR):
-        os.makedirs(SESSIONS_DIR)
+# ============================================
+# MODELS (Request/Response)
+# ============================================
 
 
-def get_session_file(session_id: str):
-    safe_id = "".join([c for c in session_id if c.isalnum() or c in "-_"])
-    return os.path.join(SESSIONS_DIR, f"{safe_id}.json")
+class CreateSessionResponse(BaseModel):
+    session_id: str
+    message: str
 
 
-def load_history(session_id: str):
-    file_path = get_session_file(session_id)
-    if os.path.exists(file_path):
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception as e:
-            print(f"Dosya okuma hatası: {e}")
-            return []
-    return []
+class ChatRequest(BaseModel):
+    session_id: str
+    message: str
 
 
-def save_history(session_id: str, history: list):
-    file_path = get_session_file(session_id)
+class ChatResponse(BaseModel):
+    session_id: str
+    user_message: str
+    bot_response: str
+    timestamp: str
+
+
+class ChatHistoryResponse(BaseModel):
+    session_id: str
+    messages: List[dict]
+
+
+class SessionListResponse(BaseModel):
+    sessions: List[str]
+    count: int
+
+
+# ============================================
+# ACTIONS (NeMo Guardrails)
+# ============================================
+
+
+@action(name="call_rag", is_system_action=True)
+async def call_rag_action(context: dict = None) -> str:
+    """RAG chain wrapper for NeMo Guardrails"""
     try:
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(history, f, ensure_ascii=False, indent=2)
+        query = context.get("last_user_message", "")
+
+        if not query:
+            return "Sorunuzu anlayamadım."
+
+        print(f"   📝 RAG Query: {query}")
+        response = ask_rag(query)
+        result = str(response).strip()
+
+        if not result:
+            result = "Bu soruya cevap bulamadım."
+
+        print(f"   ✅ RAG Response: {result[:100]}...")
+        return result
+
     except Exception as e:
-        print(f"Dosya yazma hatası: {e}")
+        print(f"   ❌ RAG Action Error: {e}")
+        return "Cevap oluştururken hata oluştu."
 
 
-# --- RAG Action ---
-async def call_rag(query: str):
-    print(f"⚡ RAG Çağrılıyor: {query}")
-    return ask_rag(query)
+@action(name="check_input_for_salary", is_system_action=True)
+async def check_input_for_salary_action(context: dict = None) -> bool:
+    """Kullanıcı girişinde maaş araması var mı kontrol et"""
+    try:
+        text = context.get("last_user_message", "")
+
+        if not text:
+            return False
+
+        text_lower = text.lower()
+
+        salary_keywords = [
+            "maaş",
+            "maas",
+            "salary",
+            "ücret",
+            "ucret",
+            "kazanç",
+            "kazanc",
+            "gelir",
+            "bordro",
+            "payroll",
+            "compensation",
+            "zam",
+            "prim",
+            "bonus",
+        ]
+
+        for keyword in salary_keywords:
+            if keyword in text_lower:
+                print(f"   🚨 Maaş keyword tespit edildi: {keyword}")
+                return True
+
+        return False
+
+    except Exception as e:
+        print(f"   ❌ Input Check Error: {e}")
+        return False
 
 
-# --- Lifespan ---
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    global rails_app
-    ensure_sessions_dir() 
+@action(name="check_salary_regex", is_system_action=True)
+async def check_salary_regex_action(context: dict = None, text: str = None) -> bool:
+    """Çıktıda maaş rakamı var mı kontrol et"""
+    try:
+        if text is None:
+            text = context.get("bot_message", "")
 
-    print("🚀 Sistem Başlatılıyor: Guardrails ve RAG yükleniyor...")
-    config_path = "./config"
-    config = RailsConfig.from_path(config_path)
-    rails_app = LLMRails(config)
-    rails_app.register_action(action=call_rag, name="call_rag")
+        if not text:
+            return False
 
-    print("✅ Sistem Hazır! Hafıza modülü aktif.")
-    yield
-    print("🛑 Sistem Kapatılıyor...")
+        pattern = r"\d{2,}[\.,]?\d{3}\s*(TL|₺|lira|USD|\$)"
+        match = re.search(pattern, text, re.IGNORECASE)
+
+        if match:
+            print(f"   🚨 Maaş verisi tespit edildi: {match.group()}")
+            return True
+
+        return False
+
+    except Exception as e:
+        print(f"   ❌ Regex Check Error: {e}")
+        return False
 
 
-# --- FastAPI App ---
-app = FastAPI(title="HR Guard API", version="1.1.0", lifespan=lifespan)
+# ============================================
+# FASTAPI APP
+# ============================================
 
+app = FastAPI(
+    title="HR Guard API",
+    description="TechFlow İK Asistanı - Session Yönetimli RAG Sistemi",
+    version="1.0.0",
+)
+
+# CORS ayarları (Frontend için)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Production'da bunu değiştir!
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-# --- Modeller ---
-class ChatRequest(BaseModel):
-    message: str
-    session_id: str  # Artık zorunlu, çünkü dosyayı buna göre açacağız
+# NeMo Guardrails Instance (Global)
+rails_app = None
 
 
-class ChatResponse(BaseModel):
-    response: str
-    session_id: str
+@app.on_event("startup")
+async def startup_event():
+    """Sunucu başlatıldığında NeMo Guardrails'i yükle"""
+    global rails_app
+
+    print("\n" + "=" * 60)
+    print("🚀 HR GUARD API BAŞLATILIYOR...")
+    print("=" * 60 + "\n")
+
+    try:
+        # Config yükle
+        config_path = "./config"
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(f"Config klasörü bulunamadı: {config_path}")
+
+        print(f"📂 Config yükleniyor: {config_path}")
+        config = RailsConfig.from_path(config_path)
+
+        # Custom LLM oluştur
+        custom_llm = NeMoCompatibleGemini(
+            model=MODEL_NAME, temperature=TEMP, max_output_tokens=256
+        )
+
+        # Rails başlat
+        print("🔧 Rails başlatılıyor...")
+        rails_app = LLMRails(config, llm=custom_llm)
+
+        # Action'ları kaydet
+        rails_app.register_action(call_rag_action, name="call_rag")
+        rails_app.register_action(
+            check_input_for_salary_action, name="check_input_for_salary"
+        )
+        rails_app.register_action(check_salary_regex_action, name="check_salary_regex")
+
+        print("✅ Action'lar kaydedildi")
+        print("\n" + "=" * 60)
+        print("✅ HR GUARD API HAZIR!")
+        print("=" * 60 + "\n")
+
+    except Exception as e:
+        print(f"\n❌ BAŞLATMA HATASI: {e}")
+        import traceback
+
+        traceback.print_exc()
+        raise
 
 
-# --- Endpointler ---
+# ============================================
+# ENDPOINTS
+# ============================================
+
+
+@app.get("/")
+async def root():
+    """Health check"""
+    return {
+        "status": "online",
+        "service": "HR Guard API",
+        "version": "1.0.0",
+        "endpoints": {
+            "create_session": "POST /session/create",
+            "chat": "POST /chat",
+            "history": "GET /session/{session_id}/history",
+            "delete_session": "DELETE /session/{session_id}",
+            "list_sessions": "GET /sessions",
+        },
+    }
+
+
+@app.post("/session/create", response_model=CreateSessionResponse)
+async def create_session():
+    """Yeni bir chat session oluşturur"""
+    try:
+        session_id = SessionManager.create_session()
+        return CreateSessionResponse(
+            session_id=session_id, message="Session başarıyla oluşturuldu"
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Session oluşturulamadı: {str(e)}",
+        )
 
 
 @app.post("/chat", response_model=ChatResponse)
-async def chat_endpoint(request: ChatRequest):
+async def chat(request: ChatRequest):
+    """Kullanıcı mesajı gönderir ve bot cevabı alır"""
     global rails_app
 
     if not rails_app:
-        raise HTTPException(status_code=503, detail="Sistem hazır değil.")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Rails sistemi henüz hazır değil",
+        )
+
+    # Session kontrolü
+    if not SessionManager.session_exists(request.session_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Session bulunamadı: {request.session_id}",
+        )
 
     try:
+        print(f"\n{'='*60}")
+        print(f"📨 Yeni Mesaj - Session: {request.session_id}")
+        print(f"👤 User: {request.message}")
+        print(f"{'='*60}\n")
 
-        history = load_history(request.session_id)
+        # Kullanıcı mesajını kaydet
+        SessionManager.save_message(request.session_id, "user", request.message)
 
-        messages_to_send = history.copy() 
-        messages_to_send.append(
-            {"role": "user", "content": request.message}
-        )  # Yeni mesaj
+        # NeMo Guardrails'e gönder
+        response = rails_app.generate(
+            messages=[{"role": "user", "content": request.message}]
+        )
 
+        # Response'u parse et
+        if isinstance(response, dict):
+            bot_response = response.get("content", "")
+        elif isinstance(response, str):
+            bot_response = response
+        elif hasattr(response, "content"):
+            bot_response = response.content
+        else:
+            bot_response = str(response)
 
-        response = await rails_app.generate_async(messages=messages_to_send)
+        bot_response = bot_response.strip()
 
-        bot_reply = response.content
+        if not bot_response:
+            bot_response = "Üzgünüm, bir cevap oluşturamadım."
 
-        if not bot_reply:
-            bot_reply = "Üzgünüm, bir hata oluştu."
+        print(f"🤖 Bot: {bot_response}\n")
 
-        history.append({"role": "user", "content": request.message})
+        # Bot cevabını kaydet
+        SessionManager.save_message(request.session_id, "assistant", bot_response)
 
-        history.append({"role": "assistant", "content": bot_reply})
+        from datetime import datetime
 
-        save_history(request.session_id, history)
-
-        return ChatResponse(response=bot_reply, session_id=request.session_id)
+        return ChatResponse(
+            session_id=request.session_id,
+            user_message=request.message,
+            bot_response=bot_response,
+            timestamp=datetime.now().isoformat(),
+        )
 
     except Exception as e:
-        print(f"HATA: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"❌ Chat Error: {e}")
+        import traceback
+
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Mesaj işlenirken hata: {str(e)}",
+        )
+
+
+@app.get("/session/{session_id}/history", response_model=ChatHistoryResponse)
+async def get_chat_history(session_id: str):
+    """Session'ın tüm chat geçmişini döner"""
+    if not SessionManager.session_exists(session_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Session bulunamadı: {session_id}",
+        )
+
+    messages = SessionManager.get_chat_history(session_id)
+    return ChatHistoryResponse(session_id=session_id, messages=messages)
+
+
+@app.delete("/session/{session_id}")
+async def delete_session(session_id: str):
+    """Session'ı siler"""
+    if not SessionManager.session_exists(session_id):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Session bulunamadı: {session_id}",
+        )
+
+    success = SessionManager.delete_session(session_id)
+
+    if success:
+        return {"message": f"Session silindi: {session_id}"}
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Session silinemedi",
+        )
+
+
+@app.get("/sessions", response_model=SessionListResponse)
+async def list_sessions():
+    """Tüm aktif session'ları listeler"""
+    sessions = SessionManager.list_all_sessions()
+    return SessionListResponse(sessions=sessions, count=len(sessions))
+
+
+# ============================================
+# RUN (Development)
+# ============================================
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "api:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,  # Development için
+        log_level="info",
+    )
