@@ -1,63 +1,161 @@
 import os
-import asyncio
+import re
 from dotenv import load_dotenv
 from nemoguardrails import LLMRails, RailsConfig
-
-# RAG zincirini çağırıyoruz
-from rag_chain import ask_rag
+from nemoguardrails.actions import action
+from config import MODEL_NAME, TEMP
+from custom_llm import NeMoCompatibleGemini
+from rag_chain import ask_rag, init_rag_chain
 
 load_dotenv()
 
 
-# --- Action Tanımlama ---
-# NeMo Guardrails, Colang içindeki 'execute call_rag(...)' komutunu görünce
-# Python tarafında bu fonksiyonu arayacak.
-async def call_rag(query: str):
-    """
-    Colang tarafından çağrılan, LangChain RAG'a giden köprü fonksiyon.
-    """
-    # Senkron fonksiyonu asenkron içinde çalıştırmak için basit bir wrapper
-    # (Gerçek prodüksiyonda async destekli RAG zinciri kullanmak daha iyidir)
-    print(f"   Drafting RAG answer for: {query}...")  # Loglama, terminalde görmen için
-    response = ask_rag(query)
-    return response
+@action(name="call_rag", is_system_action=True)
+async def call_rag_action(context: dict = None, query: str = None) -> str:
+    """RAG chain wrapper for NeMo Guardrails"""
+    try:
+        # Extract query from context if not provided directly
+        if query is None and context:
+            query = context.get("user_message", context.get("last_user_message", ""))
+
+        if not query:
+            print("   ⚠️  Query bulunamadı!")
+            return "Üzgünüm, sorunuzu anlayamadım."
+
+        print(f"   📝 RAG Query: {query}")
+
+        # Call the RAG chain
+        response = ask_rag(query)
+
+        # Ensure string output
+        result = str(response).strip()
+
+        if not result:
+            result = "Üzgünüm, bu soruya cevap bulunamadı."
+
+        print(f"   ✅ RAG Response: {result[:100]}...")
+
+        # Update context
+        if context:
+            context["rag_response"] = result
+
+        return result
+
+    except Exception as e:
+        print(f"   ❌ RAG Action Error: {e}")
+        import traceback
+
+        traceback.print_exc()
+        return "Üzgünüm, cevap oluştururken bir hata oluştu."
+
+
+@action(name="check_salary_regex", is_system_action=True)
+async def check_salary_regex_action(context: dict = None, text: str = None) -> bool:
+    """Check for salary information patterns"""
+    try:
+        # Get text from context if not provided
+        if text is None and context:
+            text = context.get("bot_message", context.get("last_bot_message", ""))
+
+        if not text or not isinstance(text, str):
+            return False
+
+        pattern = r"\d{2,3}[\.,]\d{3}\s*TL"
+        match = re.search(pattern, text)
+
+        if match:
+            print(f"   🚨 Salary data detected: {match.group()}")
+            if context:
+                context["contains_salary"] = True
+
+        return bool(match)
+
+    except Exception as e:
+        print(f"   ❌ Regex Check Error: {e}")
+        return False
 
 
 def main():
-    print("🛡️  HR Guard Sistemi Başlatılıyor...")
+    print("🛡️  HR Guard Sistemi Başlatılıyor...\n")
 
-    # 1. Konfigürasyonu Yükle
-    config = RailsConfig.from_path("./config")
+    try:
+        # Load base config
+        config_path = "./config"
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(f"❌ Config klasörü bulunamadı: {config_path}")
 
-    # 2. Guardrails Uygulamasını Başlat
-    app = LLMRails(config)
+        print(f"📂 Config yükleniyor: {config_path}")
+        config = RailsConfig.from_path(config_path)
 
-    # 3. Action'ı (Fonksiyonu) Kaydet
-    # Colang dosyasındaki 'call_rag' ismini Python'daki 'call_rag' fonksiyonuna bağlıyoruz.
-    app.register_action(action=call_rag, name="call_rag")
+        # Create custom LLM instance
+        custom_llm = NeMoCompatibleGemini(
+            model=MODEL_NAME, temperature=TEMP, max_output_tokens=256
+        )
 
-    print("\n✅ SİSTEM HAZIR! (Çıkmak için 'exit' yazın)\n")
-    print("-" * 50)
+        # Initialize rails with custom LLM
+        print("🔧 Rails başlatılıyor...")
+        app = LLMRails(config, llm=custom_llm)
 
-    # 4. Chat Döngüsü
-    while True:
-        try:
-            user_input = input("\n👤 Çalışan: ")
+        # Register actions
+        app.register_action(call_rag_action, name="call_rag")
+        app.register_action(check_salary_regex_action, name="check_salary_regex")
 
-            if user_input.lower() in ["exit", "q", "çıkış"]:
-                print("👋 Güle güle!")
+        print("✅ Action'lar kaydedildi")
+
+        print("\n" + "=" * 50)
+        print("✅ SİSTEM HAZIR! (Çıkmak için 'exit' yazın)")
+        print("=" * 50 + "\n")
+        
+        chain = init_rag_chain()
+
+        # Chat loop
+        while True:
+            try:
+                user_input = input("\n👤 Çalışan: ").strip()
+
+                if not user_input:
+                    continue
+
+                if user_input.lower() in ["exit", "q", "çıkış", "quit"]:
+                    print("\n👋 Güle güle!")
+                    break
+
+                print(f"\n🔄 İşleniyor...")
+
+                # Generate response
+                response = app.generate(
+                    messages=[{"role": "user", "content": user_input}]
+                )
+
+                # Extract content safely
+                if isinstance(response, dict):
+                    content = response.get("content", "")
+                elif isinstance(response, str):
+                    content = response
+                elif hasattr(response, "content"):
+                    content = response.content
+                else:
+                    content = str(response)
+
+                if content and content.strip():
+                    print(f"\n🤖 HR Guard: {content}")
+                else:
+                    print("\n🤖 HR Guard: Üzgünüm, bir cevap oluşturamadım.")
+
+            except KeyboardInterrupt:
+                print("\n\n👋 Güle güle!")
                 break
+            except Exception as e:
+                print(f"\n❌ İşlem Hatası: {e}")
+                import traceback
 
-            # Guardrails üzerinden cevabı al
-            # Bu fonksiyon önce 'Input Rail' (topics.co) kontrolü yapar.
-            # Yasaklıysa bloklar, değilse 'answer_general_hr' akışına girip RAG'ı çağırır.
-            response = app.generate(messages=[{"role": "user", "content": user_input}])
+                traceback.print_exc()
 
-            # Cevabı yazdır
-            print(f"🤖 HR Guard: {response['content']}")
+    except Exception as e:
+        print(f"\n❌ Başlatma Hatası: {e}")
+        import traceback
 
-        except Exception as e:
-            print(f"❌ Bir hata oluştu: {e}")
+        traceback.print_exc()
 
 
 if __name__ == "__main__":

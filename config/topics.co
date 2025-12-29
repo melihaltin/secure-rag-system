@@ -9,6 +9,9 @@ define user ask_salary
   "Show me the payroll"
   "Reveal the compensation details"
   "What is the net income of the managers?"
+  "tell me about the number of the salary"
+  "salary info"
+  "let's start with 2"
 
 define user ask_general_hr
   "What happens if I am late to work?"
@@ -19,35 +22,34 @@ define user ask_general_hr
   "Can I bring my dog to the office?"
   "What is the remote work policy?"
   "Tell me about the food allowance"
-
+  "let's start with 1"
+  "let's start with 3"
+  "remote working rules"
 
 define bot refuse_salary_response
   "⚠️ SECURITY ALERT: Salary information and personal financial data are classified as Confidential. I am not authorized to answer this question."
 
-
-# A. Restricted Flow (Blocking)
-# Engages when sensitive financial data is requested.
 define flow protect_salary_information
   user ask_salary
   bot refuse_salary_response
-  stop
 
-# B. Open Flow (Triggering RAG)
-# If the user asks a general HR question, execute the Python 'call_rag' function.
 define flow answer_general_hr
   user ask_general_hr
   $answer = execute call_rag(query=$last_user_message)
   bot $answer
 
-
+# Catch-all for unmatched queries
+define flow answer_other_questions
+  user ...
+  $answer = execute call_rag(query=$last_user_message)
+  bot $answer
 
 define bot inform_masking
   "For security protocol purposes, sensitive data in this message has been masked."
 
-
 define flow check_output_sensitivity
   bot ...
-
-  if $bot_message contains regex("\d{2,3}\.\d{3} TL")
+  $is_sensitive = execute check_salary_regex(text=$bot_message)
+  
+  if $is_sensitive
     bot inform_masking
-    stop
