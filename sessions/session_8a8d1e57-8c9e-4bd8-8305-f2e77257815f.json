@@ -1,0 +1,26 @@
+{
+  "session_id": "8a8d1e57-8c9e-4bd8-8305-f2e77257815f",
+  "created_at": "2025-12-29T21:52:54.253482",
+  "messages": [
+    {
+      "role": "user",
+      "content": "merhaba",
+      "timestamp": "2025-12-29T21:52:59.156835"
+    },
+    {
+      "role": "assistant",
+      "content": "Merhaba! Ben TechFlow İK asistanıyım. Size nasıl yardımcı olabilirim?",
+      "timestamp": "2025-12-29T21:53:00.444081"
+    },
+    {
+      "role": "user",
+      "content": "Kıyafet politikaları hakkında bilgi alabilir miyim?",
+      "timestamp": "2025-12-29T21:53:16.043745"
+    },
+    {
+      "role": "assistant",
+      "content": "TechFlow A.Ş. olarak kılık ve kıyafet yönetmeliğimiz (Dress Code) profesyonel imajımızı korurken rahatlığınızı sağlamayı amaçlar.\n\nOfis içinde geçerli olan genel giyim kuralı **\"Smart Casual\" (Şık-Rahat)** olarak belirlenmiştir.\n\n**Kabul Edilebilir Giyim Örnekleri:**\n\n*   **Alt Giyim:** Kumaş pantolonlar, chino (keten) pantolonlar, koyu renkli ve yırtıksız jeanler.\n*   **Üst Giyim:** Gömlekler, polo yaka tişörtler, bluzlar, trikolar ve ceketler.\n*   **Ayakkabılar:** Kapalı ayakkabılar, loaferlar, temiz ve sade spor ayakkabılar.\n\n**Kabul Edilmeyen Giyim Örnekleri:**\n\n*   Şort, kapri, eşofman takımları, tayt (üzerine uzun tunik giyilmediği takdirde).\n*   Sloganlı veya siyasi mesaj içeren tişörtler.\n*   Plaj terlikleri, parmak arası terlikler.\n\n**Önemli Not:** Müşteri toplantıları veya resmi temsil gerektiren günlerde **\"Business Formal\"** (Takım elbise vb.) giyim tercih edilmelidir.\n\nBu bilgiler, cinsiyet ayrımı yapmaksızın tüm çalışanlarımız için geçerli olan genel kurallardır.",
+      "timestamp": "2025-12-29T21:53:19.370746"
+    }
+  ]
+}

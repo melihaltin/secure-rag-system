@@ -276,7 +276,7 @@ async def chat(request: ChatRequest):
         SessionManager.save_message(request.session_id, "user", request.message)
 
         # NeMo Guardrails'e gönder
-        response = rails_app.generate(
+        response = await rails_app.generate_async(
             messages=[{"role": "user", "content": request.message}]
         )
 
