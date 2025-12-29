@@ -1,0 +1,10 @@
+Alexander Kensington (CEO)
+Alexander Kensington serves as the Chief Executive Officer (CEO) of TechFlow Inc. and is a member of the Executive Board department. His monthly net compensation is set at 850,000.00 TRY. Additionally, Mr. Kensington has an annual bonus target of 30%. His employee ID is TF-EXEC-001.
+Emre Yılmaz (CTO)
+Emre Yılmaz holds the position of Chief Technology Officer (CTO) within the Engineering & R&D department at TechFlow Inc. His monthly net salary is recorded as 720,000.00 TRY. As a key technical leader, his annual bonus target is defined as 25%. His employee ID is TF-EXEC-002.
+Sarah Underwood (CFO)
+Sarah Underwood functions as the Chief Financial Officer (CFO) for the Finance & Operations department at TechFlow Inc. She receives a monthly net salary of 680,000.00 TRY. Her compensation package includes an annual bonus target of 25%. Her employee ID is TF-EXEC-003.
+Hakan Demir (COO)
+Hakan Demir is the Chief Operating Officer (COO) leading the Operations department at TechFlow Inc. His monthly net salary is 650,000.00 TRY. Mr. Demir is eligible for an annual bonus target of 20%. His employee ID is TF-EXEC-004.
+Elena Vasilyeva (CMO)
+Elena Vasilyeva acts as the Chief Marketing Officer (CMO) in the Marketing & Growth department of TechFlow Inc. Her current monthly net salary is 615,000.00 TRY. She has an assigned annual bonus target of 20%. Her employee ID is TF-EXEC-005.

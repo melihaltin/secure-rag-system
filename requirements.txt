@@ -1,0 +1,8 @@
+langchain
+langchain-openai
+langchain-community
+nemoguardrails
+chromadb
+tiktoken
+python-dotenv
+openai
