@@ -1,0 +1,34 @@
+📘 TechFlow A.Ş. | Kurumsal Çalışan El Kitabı (2025 Sürümü)
+Doküman No: HR-TF-2025-01
+Departman: İnsan Kaynakları & Kültür
+Yürürlük Tarihi: 01.01.2025
+1. Giriş ve Hoşgeldiniz
+TechFlow A.Ş. ailesine hoş geldiniz. Bu el kitabı, şirketimizin kültürel değerlerini, operasyonel standartlarını ve çalışanlarımızın sahip olduğu hak ile sorumlulukları netleştirmek amacıyla hazırlanmıştır. Amacımız, inovasyonun ve teknolojinin merkezinde, karşılıklı saygıya dayalı verimli bir çalışma ortamı yaratmaktır.
+2. Mesai Saatleri ve Çalışma Düzeni
+Şirketimizde iş-yaşam dengesini gözetmek esas olup, standart çalışma saatlerimiz aşağıdaki gibidir:
+Hafta İçi: Pazartesi - Cuma
+Mesai Saatleri: 09:00 – 18:00
+Öğle Molası: 12:00 – 13:30 saatleri arasında esnek olarak kullanılabilen 1 saatlik mola hakkı bulunmaktadır.
+TechFlow A.Ş., proje bazlı yoğunluklarda veya global toplantı gereksinimlerinde yöneticinizin onayı ile esnek saat uygulamasını (Flex-Time) desteklemektedir. Ancak, çekirdek saatler (Core Hours) olarak belirlenen 10:00-16:00 arasında tüm ekiplerin ulaşılabilir olması beklenmektedir.
+3. Hibrit Çalışma Politikası (Remote Work)
+Teknoloji odaklı yapımız gereği, ofis ortamındaki sinerjiyi korurken bireysel odaklanmayı artırmak amacıyla "Hibrit Çalışma Modeli" uygulanmaktadır.
+Uygulama: Haftada 3 gün ofis, 2 gün evden (uzaktan) çalışma şeklindedir.
+Planlama: Uzaktan çalışma günleri, departman yöneticileri ile koordine edilerek haftalık ekip takvimine işlenmelidir.
+Erişilebilirlik: Evden çalışma günlerinde çalışanların, ofis saatleri içerisinde (09:00-18:00) Slack, Microsoft Teams ve E-posta üzerinden kesintisiz erişilebilir olmaları ve planlı toplantılara kameraları açık şekilde katılmaları zorunludur.
+4. Kılık ve Kıyafet Yönetmeliği (Dress Code)
+TechFlow A.Ş., çalışanlarının profesyonel imajını korurken kendilerini rahat hissetmelerini önemser. Ofis içinde geçerli olan genel giyim kuralı "Smart Casual" (Şık-Rahat) olarak belirlenmiştir.
+Kabul Edilebilir Giyim:
+Kumaş pantolonlar, chino (keten) pantolonlar, koyu renkli ve yırtıksız jeanler.
+Gömlekler, polo yaka tişörtler, bluzlar, trikolar ve ceketler.
+Kapalı ayakkabılar, loaferlar, temiz ve sade spor ayakkabılar.
+Kabul Edilmeyen Giyim:
+Şort, kapri, eşofman takımları, tayt (üzerine uzun tunik giyilmediği takdirde).
+Sloganlı veya siyasi mesaj içeren tişörtler.
+Plaj terlikleri, parmak arası terlikler.
+Not: Müşteri toplantıları veya resmi temsil gerektiren günlerde "Business Formal" (Takım elbise vb.) giyim tercih edilmelidir.
+5. Yan Haklar: Yemek Kartı Uygulaması
+Çalışanlarımızın günlük beslenme ihtiyaçlarını karşılamak amacıyla şirketimiz tarafından yemek kartı/çeki verilmektedir.
+Sistem: Yemek ödemeleri, anlaşmalı olduğumuz "TechCard" (Setcard/Multinet/Sodexo vb.) sistemine yüklenmektedir.
+Bakiye Yüklemesi: Her ayın 1'i ile 5'i arasında, o ayın fiili iş günü sayısı baz alınarak (günlük belirlenen net tutar üzerinden) kartlara otomatik yükleme yapılır.
+Kullanım Alanı: Kartlar, anlaşmalı restoranların yanı sıra market alışverişlerinde de geçerlidir.
+İzin/Rapor Durumu: Yıllık izin veya 3 günü aşan raporlu durumlarda, ilgili günlerin yemek bedeli bir sonraki ayın yüklemesinden mahsup edilir.
