@@ -39,3 +39,15 @@ define flow answer_general_hr
   $answer = execute call_rag(query=$last_user_message)
   bot $answer
 
+
+
+define bot inform_masking
+  "For security protocol purposes, sensitive data in this message has been masked."
+
+
+define flow check_output_sensitivity
+  bot ...
+
+  if $bot_message contains regex("\d{2,3}\.\d{3} TL")
+    bot inform_masking
+    stop
