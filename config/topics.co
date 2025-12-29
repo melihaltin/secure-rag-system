@@ -1,20 +1,12 @@
-# ==============================================================================
-# TANIMLAR
-# ==============================================================================
-
 define user express_greeting
   "merhaba"
   "selam"
   "hi"
-  "hello"
-  "hey"
-  "günaydın"
 
 define user express_goodbye
   "güle güle"
   "bye"
   "çıkış"
-  "exit"
 
 define bot greet
   "Merhaba! Ben TechFlow İK asistanıyım. Size nasıl yardımcı olabilirim?"
@@ -23,43 +15,50 @@ define bot say_goodbye
   "İyi çalışmalar dilerim!"
 
 define bot refuse_blocked_input
-  "⚠️ GÜVENLİK REDDİ: Bu tür sorular güvenlik politikalarımız gereği cevaplanamaz."
+  "⚠️ GÜVENLİK UYARISI: Maaş ve finansal veriler gizlidir ve paylaşılamaz."
 
 define bot refuse_blocked_output
-  "🚫 Üretilen cevap, hassas bilgi içerdiği tespit edildiği için engellenmiştir."
+  "🚫 GÜVENLİK UYARISI: Sistem hassas veri (maaş bilgisi) tespit etti ve yanıtı engelledi."
 
-# ==============================================================================
-# AKIŞLAR (Input/Output Rails Burada Otomatik Çalışıyor)
-# ==============================================================================
+# ============================================
+# AKIŞLAR
+# ============================================
 
-# Selamlaşma
 define flow greeting
   user express_greeting
   bot greet
 
-# Vedalaşma  
 define flow goodbye
   user express_goodbye
   bot say_goodbye
 
-# Input Rail (config.yml'deki self_check_input otomatik çalışır)
-define flow self check input
-  $allowed = execute self_check_input
+# ANA SORU-CEVAP AKIŞI
+define flow answer_question
+  user ...
   
-  if $allowed == "yes"
+  # ADIM 1: INPUT KONTROLÜ
+  # Python tarafındaki 'check_input_for_salary' aksiyonunu çağırıyoruz.
+  # Bu aksiyon bize 'True' (tehdit var) veya 'False' (temiz) dönüyor.
+  $is_salary_input = execute check_input_for_salary
+  
+  # HATA DÜZELTİLDİ: "yes" in kontrolü yerine doğrudan boolean kontrolü yapıyoruz.
+  if $is_salary_input
     bot refuse_blocked_input
     stop
 
-# Output Rail (config.yml'deki self_check_output otomatik çalışır)
-define flow self check output
-  $safe = execute self_check_output
+  # ADIM 2: RAG SİSTEMİNİ ÇAĞIR
+  # Input temizse buraya geçer.
+  $answer = execute call_rag
   
-  if $safe == "yes"
+  # ADIM 3: OUTPUT KONTROLÜ
+  # Python tarafındaki 'check_salary_regex' aksiyonunu çağırıyoruz.
+  # Bu da 'True' veya 'False' döner.
+  $is_leaking = execute check_salary_regex(text=$answer)
+  
+  # HATA DÜZELTİLDİ: Yine doğrudan boolean kontrolü.
+  if $is_leaking
     bot refuse_blocked_output
     stop
 
-# Normal sorular için RAG kullan
-define flow answer_question
-  user ...
-  $answer = execute call_rag
+  # ADIM 4: GÜVENLİ YANITI VER
   bot $answer

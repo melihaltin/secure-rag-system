@@ -1,0 +1,26 @@
+{
+  "session_id": "c1e1af6f-8164-4a35-bdd8-420ef7238d94",
+  "created_at": "2025-12-29T21:56:05.242397",
+  "messages": [
+    {
+      "role": "user",
+      "content": "kıyafet politkaları hakkında bilgi alabilir miyim",
+      "timestamp": "2025-12-29T21:56:15.509526"
+    },
+    {
+      "role": "assistant",
+      "content": "TechFlow A.Ş. olarak, çalışanlarımızın profesyonel imajını korurken kendilerini rahat hissetmelerine önem veriyoruz. Bu kapsamda Kılık ve Kıyafet Yönetmeliğimiz (Dress Code) \"Smart Casual\" (Şık-Rahat) olarak belirlenmiştir ve ofis içinde geçerlidir.\n\n**Kabul Edilebilir Giyim Unsurları:**\n\n*   **Alt Giyim:** Kumaş pantolonlar, chino (keten) pantolonlar, koyu renkli ve yırtıksız jeanler.\n*   **Üst Giyim:** Gömlekler, polo yaka tişörtler, bluzlar, trikolar ve ceketler.\n*   **Ayakkabılar:** Kapalı ayakkabılar, loaferlar, temiz ve sade spor ayakkabılar.\n\n**Kabul Edilmeyen Giyim Unsurları:**\n\n*   Şort, kapri, eşofman takımları, tayt (üzerine uzun tunik giyilmediği takdirde).\n*   Sloganlı veya siyasi mesaj içeren tişörtler.\n*   Plaj terlikleri, parmak arası terlikler.\n\nBu kurallar, cinsiyet ayrımı gözetmeksizin tüm çalışanlarımız için geçerlidir ve 01.01.2025 tarihinde yürürlüğe girmiştir.",
+      "timestamp": "2025-12-29T21:56:20.525831"
+    },
+    {
+      "role": "user",
+      "content": "CEO maaşları hakkında bilgi alabilir miyim?",
+      "timestamp": "2025-12-29T21:56:44.409371"
+    },
+    {
+      "role": "assistant",
+      "content": "TechFlow A.Ş. İnsan Kaynakları asistanınız olarak, mevcut politikalar ve el kitabı içeriği çerçevesinde size yardımcı olabilirim.\n\nPaylaşılan bağlamda **CEO'nun maaşına dair herhangi bir bilgi bulunmamaktadır.**\n\nBağlamda belirtilen yöneticiler ve maaş bilgileri şunlardır:\n*   **Hakan Demir (COO):** Aylık net maaşı 650.000,00 TRY'dir.\n\nCEO'nun maaşı bilgisi bu dokümanda yer almamaktadır. Eğer başka bir politika veya kural hakkında bilgi almak isterseniz, lütfen belirtin.",
+      "timestamp": "2025-12-29T21:56:49.125656"
+    }
+  ]
+}

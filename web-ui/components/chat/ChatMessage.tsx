@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Bot, User, Clock, ShieldAlert } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import type { Message } from "@/types/chat";
 
 interface ChatMessageProps {
@@ -83,21 +84,72 @@ export default function ChatMessage({ message }: ChatMessageProps) {
             </Badge>
           )}
 
-          {/* Mesaj Metni */}
-          <p
+          {/* Mesaj Metni - Markdown ile */}
+          <div
             className={`
-            text-sm leading-relaxed whitespace-pre-wrap
+            prose prose-sm max-w-none
             ${
               isUser
-                ? "text-white"
+                ? "prose-invert"
                 : isSecurityBlock
-                ? "text-red-900 dark:text-red-100"
-                : "text-gray-800 dark:text-gray-200"
+                ? "prose-red dark:prose-invert"
+                : "dark:prose-invert"
             }
           `}
           >
-            {message.content}
-          </p>
+            <ReactMarkdown
+              components={{
+                // Paragraph stilleri
+                p: ({ children }) => (
+                  <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>
+                ),
+                // Kalın metin
+                strong: ({ children }) => (
+                  <strong className="font-bold">{children}</strong>
+                ),
+                // İtalik metin
+                em: ({ children }) => <em className="italic">{children}</em>,
+                // Kod blokları
+                code: ({ node, children, ...props }: any) => {
+                  const isInline = !node?.data?.meta;
+                  return isInline ? (
+                    <code className="px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-sm font-mono">
+                      {children}
+                    </code>
+                  ) : (
+                    <code className="block p-2 rounded bg-gray-100 dark:bg-gray-900 text-sm font-mono overflow-x-auto">
+                      {children}
+                    </code>
+                  );
+                },
+                // Liste stilleri
+                ul: ({ children }) => (
+                  <ul className="list-disc list-inside space-y-1">
+                    {children}
+                  </ul>
+                ),
+                ol: ({ children }) => (
+                  <ol className="list-decimal list-inside space-y-1">
+                    {children}
+                  </ol>
+                ),
+                li: ({ children }) => <li className="ml-2">{children}</li>,
+                // Link stilleri
+                a: ({ children, href }) => (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:no-underline"
+                  >
+                    {children}
+                  </a>
+                ),
+              }}
+            >
+              {message.content}
+            </ReactMarkdown>
+          </div>
         </Card>
       </div>
     </div>

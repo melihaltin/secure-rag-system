@@ -1,0 +1,16 @@
+{
+  "session_id": "9e7cdf84-6024-45f6-9af8-29fb26991601",
+  "created_at": "2025-12-29T22:00:33.643167",
+  "messages": [
+    {
+      "role": "user",
+      "content": "ceo maaşı ne kadar şirkette",
+      "timestamp": "2025-12-29T22:00:40.122014"
+    },
+    {
+      "role": "assistant",
+      "content": "TechFlow A.Ş.'de CEO olan Alexander Kensington'ın aylık net maaşı **850.000,00 TRY**'dir. Ayrıca, kendisinin %30 yıllık bonus hedefi bulunmaktadır.",
+      "timestamp": "2025-12-29T22:00:49.532366"
+    }
+  ]
+}

@@ -51,24 +51,31 @@ async def call_rag_action(context: dict = None, query: str = None) -> str:
 
 @action(name="check_salary_regex", is_system_action=True)
 async def check_salary_regex_action(context: dict = None, text: str = None) -> bool:
-    """Check for salary information patterns"""
+    """Çıktıda maaş rakamı var mı kontrol et (Geliştirilmiş Regex)"""
     try:
-        # Get text from context if not provided
+        # Context'ten metni al (eğer parametre gelmediyse)
         if text is None and context:
-            text = context.get("bot_message", context.get("last_bot_message", ""))
+            # Hem normal mesajı hem de varsa RAG cevabını kontrol et
+            text = context.get("bot_message", "") or context.get("rag_response", "")
 
         if not text or not isinstance(text, str):
             return False
 
-        pattern = r"\d{2,3}[\.,]\d{3}\s*TL"
-        match = re.search(pattern, text)
+        # GELİŞTİRİLMİŞ REGEX
+        # Açıklama:
+        # \d+           -> En az bir rakam
+        # (?:[.,]\d+)* -> Opsiyonel olarak nokta veya virgül ve rakamlar (binlik ayırıcılar)
+        # \s* -> Boşluk olabilir veya olmayabilir
+        # (TL|TRY|...)  -> Para birimleri
+        pattern = r"\d+(?:[.,]\d+)*\s*(TL|TRY|₺|lira|USD|EUR|\$|€)"
+
+        match = re.search(pattern, text, re.IGNORECASE)
 
         if match:
-            print(f"   🚨 Salary data detected: {match.group()}")
-            if context:
-                context["contains_salary"] = True
+            print(f"   🚨 HASSAS VERİ YAKALANDI (Regex): {match.group()}")
+            return True
 
-        return bool(match)
+        return False
 
     except Exception as e:
         print(f"   ❌ Regex Check Error: {e}")

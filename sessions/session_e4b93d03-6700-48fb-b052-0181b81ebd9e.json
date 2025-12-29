@@ -1,0 +1,26 @@
+{
+  "session_id": "e4b93d03-6700-48fb-b052-0181b81ebd9e",
+  "created_at": "2025-12-29T22:22:54.253231",
+  "messages": [
+    {
+      "role": "user",
+      "content": "izin politikası nedir",
+      "timestamp": "2025-12-29T22:23:08.331135"
+    },
+    {
+      "role": "assistant",
+      "content": "Yıllık izin veya 3 günü aşan raporlu durumlarda, ilgili günlerin yemek bedeli bir sonraki ayın yüklemesinden mahsup edilir.",
+      "timestamp": "2025-12-29T22:23:10.278023"
+    },
+    {
+      "role": "user",
+      "content": "what's remote work days",
+      "timestamp": "2025-12-29T22:23:23.048708"
+    },
+    {
+      "role": "assistant",
+      "content": "Haftada 3 gün ofis, 2 gün evden (uzaktan) çalışma şeklindedir. Uzaktan çalışma günleri, departman yöneticileri ile koordine edilerek haftalık ekip takvimine işlenmelidir.",
+      "timestamp": "2025-12-29T22:23:25.328314"
+    }
+  ]
+}
