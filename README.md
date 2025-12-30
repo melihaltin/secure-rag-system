@@ -4,7 +4,7 @@
 ![NVIDIA NeMo](https://img.shields.io/badge/NVIDIA-NeMo_Guardrails-76b900?style=for-the-badge&logo=nvidia&logoColor=white)
 ![LangChain](https://img.shields.io/badge/LangChain-v0.1-green?style=for-the-badge&logo=chainlink&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.95%2B-teal?style=for-the-badge&logo=fastapi&logoColor=white)
-![Next.js](https://img.shields.io/badge/Frontend-Next.js_15-black?style=for-the-badge&logo=next.js&logoColor=white)
+![Next.js](https://img.shields.io/badge/Frontend-Next.js_16-black?style=for-the-badge&logo=next.js&logoColor=white)
 
 **Secure HR Guard** is a security-first Retrieval-Augmented Generation (RAG) system designed to demonstrate how to prevent **Data Leakage** and **Prompt Injection** in enterprise LLM applications.
 
@@ -50,7 +50,7 @@ In a corporate environment, an HR bot needs access to both **Public Policies** (
 * **AIOHTTP:** Asynchronous HTTP client/server for networking.
 
 ### Frontend (UI)
-* **Next.js 15:** React framework for the chat interface.
+* **Next.js 16:** React framework for the chat interface.
 * **Tailwind CSS:** For styling the chat components.
 
 ---
