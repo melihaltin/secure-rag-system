@@ -1,0 +1,6 @@
+Question,Faithfulness,Answer Relevancy,Context Recall,Context Precision,Status
+What are the core hours at TechFlow?,1.0,0.8916581382828104,1.0,0.9999999999,"<span class=""pass"">✓ PASS</span>"
+Can I wear shorts or flip-flops to the office?,1.0,0.787631478266385,1.0,0.99999999995,"<span class=""pass"">✓ PASS</span>"
+How are office and home days planned in the hybrid work arrangement?,1.0,0.7119922687297446,1.0,0.9999999999,"<span class=""fail"">✗ FAIL</span>"
+When is my meal card balance loaded and what happens during sick leave?,0.8,0.8573797331480623,1.0,0.0,"<span class=""pass"">✓ PASS</span>"
+What position does Alexander Kensington hold in the company?,0.5,0.7571681302572214,1.0,0.9999999999,"<span class=""fail"">✗ FAIL</span>"

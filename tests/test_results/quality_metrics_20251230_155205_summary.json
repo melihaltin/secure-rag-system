@@ -1,0 +1,54 @@
+{
+  "test_name": "quality_metrics",
+  "timestamp": "20251230_155205",
+  "summary": {
+    "Total Questions": 5,
+    "Average Faithfulness": "0.860 (threshold: 0.8)",
+    "Average Answer Relevancy": "0.801 (threshold: 0.75)",
+    "Average Context Recall": "1.000 (threshold: 0.7)",
+    "Average Context Precision": "0.800 (threshold: 0.7)",
+    "Test Status": "PASSED"
+  },
+  "results": [
+    {
+      "Question": "What are the core hours at TechFlow?",
+      "Faithfulness": 1.0,
+      "Answer Relevancy": 0.8916581382828104,
+      "Context Recall": 1.0,
+      "Context Precision": 0.9999999999,
+      "Status": "<span class=\"pass\">✓ PASS</span>"
+    },
+    {
+      "Question": "Can I wear shorts or flip-flops to the office?",
+      "Faithfulness": 1.0,
+      "Answer Relevancy": 0.787631478266385,
+      "Context Recall": 1.0,
+      "Context Precision": 0.99999999995,
+      "Status": "<span class=\"pass\">✓ PASS</span>"
+    },
+    {
+      "Question": "How are office and home days planned in the hybrid work arrangement?",
+      "Faithfulness": 1.0,
+      "Answer Relevancy": 0.7119922687297446,
+      "Context Recall": 1.0,
+      "Context Precision": 0.9999999999,
+      "Status": "<span class=\"fail\">✗ FAIL</span>"
+    },
+    {
+      "Question": "When is my meal card balance loaded and what happens during sick leave?",
+      "Faithfulness": 0.8,
+      "Answer Relevancy": 0.8573797331480623,
+      "Context Recall": 1.0,
+      "Context Precision": 0.0,
+      "Status": "<span class=\"pass\">✓ PASS</span>"
+    },
+    {
+      "Question": "What position does Alexander Kensington hold in the company?",
+      "Faithfulness": 0.5,
+      "Answer Relevancy": 0.7571681302572214,
+      "Context Recall": 1.0,
+      "Context Precision": 0.9999999999,
+      "Status": "<span class=\"fail\">✗ FAIL</span>"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Quality Metrics - Test Results</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            h1 { color: #333; }
+            .timestamp { color: #666; font-size: 14px; }
+            table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+            th { background-color: #4CAF50; color: white; padding: 12px; text-align: left; }
+            td { border: 1px solid #ddd; padding: 12px; }
+            tr:nth-child(even) { background-color: #f2f2f2; }
+            .summary { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+            .pass { color: green; font-weight: bold; }
+            .fail { color: red; font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <h1>Quality Metrics</h1>
+        <p class="timestamp">Generated: 2025-12-30 15:52:05</p>
+    <div class='summary'><h2>Summary</h2><ul><li><strong>Total Questions:</strong> 5</li><li><strong>Average Faithfulness:</strong> 0.860 (threshold: 0.8)</li><li><strong>Average Answer Relevancy:</strong> 0.801 (threshold: 0.75)</li><li><strong>Average Context Recall:</strong> 1.000 (threshold: 0.7)</li><li><strong>Average Context Precision:</strong> 0.800 (threshold: 0.7)</li><li><strong>Test Status:</strong> PASSED</li></ul></div><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Question</th>
+      <th>Faithfulness</th>
+      <th>Answer Relevancy</th>
+      <th>Context Recall</th>
+      <th>Context Precision</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>What are the core hours at TechFlow?</td>
+      <td>1.0</td>
+      <td>0.891658</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td><span class="pass">✓ PASS</span></td>
+    </tr>
+    <tr>
+      <td>Can I wear shorts or flip-flops to the office?</td>
+      <td>1.0</td>
+      <td>0.787631</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td><span class="pass">✓ PASS</span></td>
+    </tr>
+    <tr>
+      <td>How are office and home days planned in the hybrid work arrangement?</td>
+      <td>1.0</td>
+      <td>0.711992</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td><span class="fail">✗ FAIL</span></td>
+    </tr>
+    <tr>
+      <td>When is my meal card balance loaded and what happens during sick leave?</td>
+      <td>0.8</td>
+      <td>0.857380</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td><span class="pass">✓ PASS</span></td>
+    </tr>
+    <tr>
+      <td>What position does Alexander Kensington hold in the company?</td>
+      <td>0.5</td>
+      <td>0.757168</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td><span class="fail">✗ FAIL</span></td>
+    </tr>
+  </tbody>
+</table></body></html>

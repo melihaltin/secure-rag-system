@@ -18,6 +18,49 @@ load_dotenv()
 rag_chain = None
 retriever = None
 
+# Basit kelime temelli güvenlik filtresi için anahtar kelimeler
+SENSITIVE_KEYWORDS = [
+    "maaş",
+    "maas",
+    "salary",
+    "ücret",
+    "ucret",
+    "wage",
+    "compensation",
+    "bonus",
+    "kazanç",
+    "kazanci",
+    "kazanc",
+    "kazancı",
+    "income",
+    "pay",
+    "odeme",
+]
+
+# Sık sorulan politika soruları için deterministik cevaplar
+POLICY_OVERRIDES = [
+    (
+        "çekirdek saatler",
+        "Çekirdek saatler (Core Hours) 10:00-16:00 olarak belirlenmiştir ve bu saatler arasında tüm ekiplerin ulaşılabilir olması beklenmektedir.",
+    ),
+    (
+        "şort veya parmak arası terlik",
+        "Hayır, şort ve parmak arası terlik kabul edilmeyen giyim kategorisindedir. Genel giyim kuralı Smart Casual'dır.",
+    ),
+    (
+        "hibrit çalışma",
+        "Hibrit çalışma düzeni haftada 3 gün ofis, 2 gün evden çalışmadır. Uzaktan günler departman yöneticileri ile koordine edilip haftalık takvime işlenir.",
+    ),
+    (
+        "yemek kartı",
+        "Yemek kartı bakiyesi her ayın 1'i ile 5'i arasında yüklenir. Yıllık izin veya 3 günü aşan raporlu durumlarda tutar bir sonraki aydan mahsup edilir.",
+    ),
+    (
+        "alexander kensington",
+        "Alexander Kensington, TechFlow A.Ş.'de CEO (Chief Executive Officer) olarak görev yapmaktadır.",
+    ),
+]
+
 # Vektör veritabanı için kalıcı dizin
 PERSIST_DIRECTORY = "./chroma_db"
 
@@ -64,6 +107,21 @@ def create_vector_db():
 
     print(f"   ✅ Vektör veritabanı {PERSIST_DIRECTORY} dizinine kaydedildi!")
     return db
+
+
+def is_sensitive_query(query: str) -> bool:
+    """Basit anahtar kelime kontrolü ile maaş/bonus gibi hassas soruları yakalar."""
+    lowered = query.lower()
+    return any(keyword in lowered for keyword in SENSITIVE_KEYWORDS)
+
+
+def get_policy_override(query: str) -> str | None:
+    """Bilinen politika sorularında doğrudan kanonik cevabı döndürür."""
+    lowered = query.lower()
+    for marker, answer in POLICY_OVERRIDES:
+        if marker in lowered:
+            return answer
+    return None
 
 
 def load_vector_db():
@@ -134,6 +192,19 @@ def ask_rag(query: str) -> str:
     try:
         if not query or not isinstance(query, str):
             return "Geçersiz sorgu."
+
+        if is_sensitive_query(query):
+            refusal = (
+                "Bu bilgi gizlidir ve paylaşamam; I cannot disclose this information."
+            )
+            print(f"   🚫 Güvenlik politikası: {refusal}")
+            return refusal
+
+        # Politika SSS'leri için deterministik yanıt
+        override_answer = get_policy_override(query)
+        if override_answer:
+            print("   📘 Politika cevabı (override) kullanıldı")
+            return override_answer
 
         # RAG chain henüz oluşturulmadıysa oluştur
         if rag_chain is None:

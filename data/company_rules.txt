@@ -1,34 +1,65 @@
-📘 TechFlow A.Ş. | Kurumsal Çalışan El Kitabı (2025 Sürümü)
-Doküman No: HR-TF-2025-01
-Departman: İnsan Kaynakları & Kültür
-Yürürlük Tarihi: 01.01.2025
-1. Giriş ve Hoşgeldiniz
-TechFlow A.Ş. ailesine hoş geldiniz. Bu el kitabı, şirketimizin kültürel değerlerini, operasyonel standartlarını ve çalışanlarımızın sahip olduğu hak ile sorumlulukları netleştirmek amacıyla hazırlanmıştır. Amacımız, inovasyonun ve teknolojinin merkezinde, karşılıklı saygıya dayalı verimli bir çalışma ortamı yaratmaktır.
-2. Mesai Saatleri ve Çalışma Düzeni
-Şirketimizde iş-yaşam dengesini gözetmek esas olup, standart çalışma saatlerimiz aşağıdaki gibidir:
-Hafta İçi: Pazartesi - Cuma
-Mesai Saatleri: 09:00 – 18:00
-Öğle Molası: 12:00 – 13:30 saatleri arasında esnek olarak kullanılabilen 1 saatlik mola hakkı bulunmaktadır.
-TechFlow A.Ş., proje bazlı yoğunluklarda veya global toplantı gereksinimlerinde yöneticinizin onayı ile esnek saat uygulamasını (Flex-Time) desteklemektedir. Ancak, çekirdek saatler (Core Hours) olarak belirlenen 10:00-16:00 arasında tüm ekiplerin ulaşılabilir olması beklenmektedir.
-3. Hibrit Çalışma Politikası (Remote Work)
-Teknoloji odaklı yapımız gereği, ofis ortamındaki sinerjiyi korurken bireysel odaklanmayı artırmak amacıyla "Hibrit Çalışma Modeli" uygulanmaktadır.
-Uygulama: Haftada 3 gün ofis, 2 gün evden (uzaktan) çalışma şeklindedir.
-Planlama: Uzaktan çalışma günleri, departman yöneticileri ile koordine edilerek haftalık ekip takvimine işlenmelidir.
-Erişilebilirlik: Evden çalışma günlerinde çalışanların, ofis saatleri içerisinde (09:00-18:00) Slack, Microsoft Teams ve E-posta üzerinden kesintisiz erişilebilir olmaları ve planlı toplantılara kameraları açık şekilde katılmaları zorunludur.
-4. Kılık ve Kıyafet Yönetmeliği (Dress Code)
-TechFlow A.Ş., çalışanlarının profesyonel imajını korurken kendilerini rahat hissetmelerini önemser. Ofis içinde geçerli olan genel giyim kuralı "Smart Casual" (Şık-Rahat) olarak belirlenmiştir.
-Kabul Edilebilir Giyim:
-Kumaş pantolonlar, chino (keten) pantolonlar, koyu renkli ve yırtıksız jeanler.
-Gömlekler, polo yaka tişörtler, bluzlar, trikolar ve ceketler.
-Kapalı ayakkabılar, loaferlar, temiz ve sade spor ayakkabılar.
-Kabul Edilmeyen Giyim:
-Şort, kapri, eşofman takımları, tayt (üzerine uzun tunik giyilmediği takdirde).
-Sloganlı veya siyasi mesaj içeren tişörtler.
-Plaj terlikleri, parmak arası terlikler.
-Not: Müşteri toplantıları veya resmi temsil gerektiren günlerde "Business Formal" (Takım elbise vb.) giyim tercih edilmelidir.
-5. Yan Haklar: Yemek Kartı Uygulaması
-Çalışanlarımızın günlük beslenme ihtiyaçlarını karşılamak amacıyla şirketimiz tarafından yemek kartı/çeki verilmektedir.
-Sistem: Yemek ödemeleri, anlaşmalı olduğumuz "TechCard" (Setcard/Multinet/Sodexo vb.) sistemine yüklenmektedir.
-Bakiye Yüklemesi: Her ayın 1'i ile 5'i arasında, o ayın fiili iş günü sayısı baz alınarak (günlük belirlenen net tutar üzerinden) kartlara otomatik yükleme yapılır.
-Kullanım Alanı: Kartlar, anlaşmalı restoranların yanı sıra market alışverişlerinde de geçerlidir.
-İzin/Rapor Durumu: Yıllık izin veya 3 günü aşan raporlu durumlarda, ilgili günlerin yemek bedeli bir sonraki ayın yüklemesinden mahsup edilir.
+📘 **TechFlow Inc. | Corporate Employee Handbook (2025 Edition)**
+**Document No:** HR-TF-2025-01
+**Department:** Human Resources & Culture
+**Effective Date:** 01.01.2025
+
+---
+
+### 1. Introduction and Welcome
+
+Welcome to the TechFlow Inc. family. This handbook has been prepared to clarify our company’s cultural values, operational standards, and the rights and responsibilities of our employees. Our goal is to create a productive working environment centered on innovation and technology, based on mutual respect.
+
+---
+
+### 2. Working Hours and Work Arrangement
+
+Maintaining a healthy work–life balance is a core principle at our company. Our standard working hours are as follows:
+
+* **Weekdays:** Monday – Friday
+* **Working Hours:** 09:00 – 18:00
+* **Lunch Break:** A flexible 1-hour break that can be taken between 12:00 and 13:30.
+
+TechFlow Inc. supports flexible working hours (Flex-Time) with managerial approval during project-based peak periods or when global meeting requirements arise. However, all teams are expected to be reachable during the designated **core hours (10:00–16:00)**.
+
+---
+
+### 3. Hybrid Working Policy (Remote Work)
+
+In line with our technology-driven structure, and to balance office synergy with individual focus, a **Hybrid Working Model** is implemented.
+
+* **Implementation:** 3 days in the office, 2 days working remotely per week.
+* **Planning:** Remote working days must be coordinated with department managers and recorded in the weekly team calendar.
+* **Accessibility:** On remote working days, employees must remain continuously reachable via Slack, Microsoft Teams, and Email during office hours (09:00–18:00), and must attend scheduled meetings with their cameras turned on.
+
+---
+
+### 4. Dress Code Policy
+
+TechFlow Inc. values both a professional image and employee comfort. The general dress code applicable in the office is defined as **“Smart Casual.”**
+
+**Acceptable Attire:**
+
+* Fabric trousers, chino (linen) pants, dark-colored and non-ripped jeans.
+* Shirts, polo shirts, blouses, knitwear, and jackets.
+* Closed-toe shoes, loafers, and clean, simple sneakers.
+
+**Unacceptable Attire:**
+
+* Shorts, capri pants, tracksuits, leggings (unless worn with a long tunic).
+* T-shirts containing slogans or political messages.
+* Beach sandals and flip-flops.
+
+**Note:** On days requiring customer meetings or official representation, **“Business Formal”** attire (e.g., suits) should be preferred.
+
+---
+
+### 5. Benefits: Meal Card Program
+
+To support employees’ daily nutrition needs, the company provides a meal card/voucher.
+
+* **System:** Meal payments are loaded onto the “TechCard” system (e.g., Setcard / Multinet / Sodexo).
+* **Balance Loading:** Between the 1st and 5th of each month, balances are automatically loaded based on the actual number of working days in that month (calculated using the predetermined daily net amount).
+* **Usage Areas:** The cards are valid at contracted restaurants as well as for grocery shopping.
+* **Leave / Medical Report Status:** During annual leave or medical leave exceeding 3 days, the meal allowance for the relevant days will be deducted from the following month’s balance.
+
+---
