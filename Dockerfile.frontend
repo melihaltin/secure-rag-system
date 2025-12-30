@@ -4,39 +4,40 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
 COPY web-ui/package*.json ./
 
-# Install dependencies
 RUN npm ci
 
-# Copy application code
 COPY web-ui/ .
 
-# Build the application
+# --- EKLEMEN GEREKEN KISIM BAŞLANGIÇ ---
+# Build sırasında bu değişkeni dışarıdan alacağımızı söylüyoruz
+ARG NEXT_PUBLIC_API_URL
+# Aldığımız değeri ortam değişkenine çeviriyoruz ki Next.js görsün
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+# --- EKLEMEN GEREKEN KISIM BİTİŞ ---
+
 RUN npm run build
 
 # Stage 2: Runtime
 FROM node:20-alpine
-
 WORKDIR /app
 
-# Copy from builder
+# (Geri kalan kısımlar aynı...)
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
 
-# Expose port
 EXPOSE 3000
 
-# Set environment variable for Next.js to listen on all interfaces
 ENV HOSTNAME="0.0.0.0"
 ENV PORT=3000
 
-# Health check
+# Runtime'da tekrar tanımlamaya gerek yok ama garanti olsun diye kalabilir
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL 
+
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD node -e "require('http').get('http://localhost:3000/', (res) => {if (res.statusCode !== 200) throw new Error(res.statusCode)})" || exit 1
 
-# Run the application
 CMD ["npm", "start"]
