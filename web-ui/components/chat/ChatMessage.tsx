@@ -25,11 +25,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
     >
       {/* Avatar */}
       <Avatar
-        className={`${
-          isUser
-            ? "bg-gray-700"
-            : "bg-gray-600"
-        } flex-shrink-0`}
+        className={`${isUser ? "bg-gray-700" : "bg-gray-600"} flex-shrink-0`}
       >
         <AvatarFallback className="text-white">
           {isUser ? <User size={18} /> : <Bot size={18} />}

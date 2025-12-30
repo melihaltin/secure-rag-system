@@ -24,9 +24,7 @@ export default function SessionInfo({
         <div className="flex items-center gap-3">
           <CheckCircle2 className="text-green-500" size={20} />
           <div>
-            <p className="text-sm font-medium text-gray-300">
-              Active Session
-            </p>
+            <p className="text-sm font-medium text-gray-300">Active Session</p>
             {sessionId && (
               <p className="text-xs text-gray-500 font-mono">
                 {sessionId.slice(0, 8)}...

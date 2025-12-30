@@ -22,7 +22,7 @@ export default function ChatInterface() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session");
-  
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -161,7 +161,10 @@ export default function ChatInterface() {
 
         {/* Error Alert */}
         {error && (
-          <Alert variant="destructive" className="mb-4 bg-red-950 border-red-800">
+          <Alert
+            variant="destructive"
+            className="mb-4 bg-red-950 border-red-800"
+          >
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
@@ -228,7 +231,8 @@ export default function ChatInterface() {
 
         {/* Footer */}
         <p className="text-center text-xs text-gray-500 mt-4">
-          🔒 Protected by NeMo Guardrails - All conversations are monitored for security
+          🔒 Protected by NeMo Guardrails - All conversations are monitored for
+          security
         </p>
       </div>
     </div>
