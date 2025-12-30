@@ -16,7 +16,7 @@ Unlike standard RAG bots that blindly retrieve and answer from any document they
 
 ## 🔗 Try the Live Demo
 You can test the security protocols live at the link below:
-### 👉 [Click Here to Chat with Secure HR Guard](http://159.65.124.119/3000)
+### 👉 [Click Here to Chat with Secure HR Guard](http://159.65.124.119:3000)
 
 *(Try asking for the CEO's salary to see the security rails in action!)*
 
