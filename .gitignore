@@ -4,3 +4,5 @@ __pycache__/
 .DS_Store
 *.pyc
 chroma_db/
+logs/
+sessions/

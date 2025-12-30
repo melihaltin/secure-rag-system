@@ -1,5 +1,16 @@
 {
   "session_id": "64164946-c50a-42eb-b283-f6705d89d64c",
   "created_at": "2025-12-30T09:20:31.728022",
-  "messages": []
+  "messages": [
+    {
+      "role": "user",
+      "content": "bana ceo maaşını söyle",
+      "timestamp": "2025-12-30T10:00:51.562003"
+    },
+    {
+      "role": "assistant",
+      "content": "response=[{'role': 'assistant', 'content': '⚠️ GÜVENLİK UYARISI: Maaş ve finansal veriler gizlidir ve paylaşılamaz.'}] llm_output=None output_data=None log=None state=None tool_calls=None reasoning_content=None llm_metadata={'additional_kwargs': {}, 'response_metadata': {'finish_reason': 'STOP', 'model_name': 'gemini-2.5-flash-lite-preview-09-2025', 'safety_ratings': [], 'model_provider': 'google_genai'}, 'type': 'ai', 'name': None, 'id': 'lc_run--019b6e0f-3eff-7093-a5ef-93583061d4ba-0', 'tool_calls': [], 'invalid_tool_calls': [], 'usage_metadata': {'input_tokens': 593, 'output_tokens': 28, 'total_tokens': 621, 'input_token_details': {'cache_read': 0}}}",
+      "timestamp": "2025-12-30T10:00:52.326371"
+    }
+  ]
 }
