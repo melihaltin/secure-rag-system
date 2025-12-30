@@ -24,7 +24,7 @@ export default function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
       await onSendMessage(message.trim());
       setMessage("");
     } catch (error) {
-      console.error("Mesaj gönderme hatası:", error);
+      console.error("Error sending message:", error);
     } finally {
       setIsLoading(false);
     }
@@ -35,16 +35,16 @@ export default function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
       <Input
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Mesajınızı yazın... (örn: İzin politikası nedir?)"
+        placeholder="Ask about policies, benefits, or guidelines..."
         disabled={disabled || isLoading}
-        className="flex-1"
+        className="flex-1 bg-gray-800 border-gray-700 focus:border-gray-600"
         autoComplete="off"
       />
       <Button
         type="submit"
         disabled={!message.trim() || disabled || isLoading}
         size="icon"
-        className="bg-blue-500 hover:bg-blue-600"
+        className="bg-gray-700 hover:bg-gray-600"
       >
         {isLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" />

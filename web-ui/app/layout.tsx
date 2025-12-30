@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "HR Guard - İK Asistanı",
-  description: "TechFlow İK Politikaları ve Yan Haklar Asistanı",
+  title: "HR Guard - HR Assistant",
+  description: "TechFlow HR Policies and Benefits Assistant",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className={inter.className}>{children}</body>
     </html>
   );

@@ -19,22 +19,22 @@ export default function SessionInfo({
   onDeleteSession,
 }: SessionInfoProps) {
   return (
-    <Card className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950 dark:to-pink-950 border-purple-200 dark:border-purple-800">
+    <Card className="p-3 bg-gray-800 border-gray-700">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <CheckCircle2 className="text-green-500" size={24} />
+          <CheckCircle2 className="text-green-500" size={20} />
           <div>
-            <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-              Aktif Session
+            <p className="text-sm font-medium text-gray-300">
+              Active Session
             </p>
             {sessionId && (
               <p className="text-xs text-gray-500 font-mono">
-                ID: {sessionId.slice(0, 8)}...
+                {sessionId.slice(0, 8)}...
               </p>
             )}
           </div>
-          <Badge variant="secondary" className="ml-2">
-            {messageCount} mesaj
+          <Badge variant="secondary" className="ml-2 bg-gray-700 text-gray-300">
+            {messageCount}
           </Badge>
         </div>
 
@@ -43,10 +43,10 @@ export default function SessionInfo({
             onClick={onNewSession}
             size="sm"
             variant="outline"
-            className="gap-2"
+            className="gap-2 border-gray-700 hover:bg-gray-700"
           >
-            <RefreshCw size={16} />
-            Yeni Session
+            <RefreshCw size={14} />
+            New
           </Button>
           {sessionId && (
             <Button
@@ -55,8 +55,7 @@ export default function SessionInfo({
               variant="destructive"
               className="gap-2"
             >
-              <Trash2 size={16} />
-              Sil
+              <Trash2 size={14} />
             </Button>
           )}
         </div>

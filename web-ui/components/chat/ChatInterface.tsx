@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -18,7 +19,10 @@ import { chatAPI } from "@/lib/api";
 import type { Message } from "@/types/chat";
 
 export default function ChatInterface() {
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get("session");
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,9 +35,13 @@ export default function ChatInterface() {
     }
   }, [messages]);
 
-  // İlk yüklemede session oluştur
+  // Create session on initial load if no session in URL
   useEffect(() => {
-    createNewSession();
+    if (!sessionId) {
+      createNewSession();
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   const createNewSession = async () => {
@@ -41,14 +49,15 @@ export default function ChatInterface() {
     setError(null);
     try {
       const response = await chatAPI.createSession();
-      setSessionId(response.session_id);
+      // Update URL with new session ID
+      router.push(`?session=${response.session_id}`);
       setMessages([]);
-      console.log("✅ Yeni session oluşturuldu:", response.session_id);
+      console.log("✅ New session created:", response.session_id);
     } catch (err) {
       setError(
-        "Session oluşturulamadı. Lütfen API sunucusunun çalıştığından emin olun."
+        "Failed to create session. Please ensure the API server is running."
       );
-      console.error("Session oluşturma hatası:", err);
+      console.error("Session creation error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -56,11 +65,11 @@ export default function ChatInterface() {
 
   const handleSendMessage = async (messageText: string) => {
     if (!sessionId) {
-      setError("Session bulunamadı. Lütfen yeni bir session oluşturun.");
+      setError("Session not found. Please create a new session.");
       return;
     }
 
-    // Kullanıcı mesajını hemen ekle (optimistic update)
+    // Add user message immediately (optimistic update)
     const userMessage: Message = {
       role: "user",
       content: messageText,
@@ -69,10 +78,10 @@ export default function ChatInterface() {
     setMessages((prev) => [...prev, userMessage]);
 
     try {
-      // API'ye gönder
+      // Send to API
       const response = await chatAPI.sendMessage(sessionId, messageText);
 
-      // Bot cevabını ekle
+      // Add bot response
       const botMessage: Message = {
         role: "assistant",
         content: response.bot_response,
@@ -80,10 +89,10 @@ export default function ChatInterface() {
       };
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {
-      setError("Mesaj gönderilemedi. Lütfen tekrar deneyin.");
-      console.error("Mesaj gönderme hatası:", err);
+      setError("Failed to send message. Please try again.");
+      console.error("Message sending error:", err);
 
-      // Hata durumunda kullanıcı mesajını geri al
+      // Remove user message on error
       setMessages((prev) => prev.filter((m) => m !== userMessage));
     }
   };
@@ -93,22 +102,22 @@ export default function ChatInterface() {
 
     try {
       await chatAPI.deleteSession(sessionId);
-      console.log("🗑️ Session silindi:", sessionId);
+      console.log("🗑️ Session deleted:", sessionId);
       createNewSession();
     } catch (err) {
-      setError("Session silinemedi.");
-      console.error("Session silme hatası:", err);
+      setError("Failed to delete session.");
+      console.error("Session deletion error:", err);
     }
   };
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-gray-800">
-        <Card className="w-full max-w-md p-8">
+      <div className="flex items-center justify-center h-screen bg-gray-900">
+        <Card className="w-full max-w-md p-8 bg-gray-800 border-gray-700">
           <div className="flex flex-col items-center gap-4">
-            <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
-            <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-              HR Guard Başlatılıyor...
+            <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
+            <p className="text-lg font-medium text-gray-300">
+              Initializing HR Guard...
             </p>
           </div>
         </Card>
@@ -117,21 +126,21 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
-      <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-gray-900 p-4">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <Card className="mb-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-purple-200 dark:border-purple-800">
+        <Card className="mb-4 bg-gray-800 border-gray-700">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500">
-                <Shield className="text-white" size={28} />
+              <div className="p-2 rounded-lg bg-gray-700">
+                <Shield className="text-gray-300" size={24} />
               </div>
               <div>
-                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  HR Guard Asistan
+                <CardTitle className="text-xl font-semibold text-gray-100">
+                  HR Guard
                 </CardTitle>
-                <CardDescription>
-                  TechFlow İK Politikaları ve Yan Haklar
+                <CardDescription className="text-gray-400">
+                  TechFlow HR Policies & Benefits
                 </CardDescription>
               </div>
             </div>
@@ -152,48 +161,47 @@ export default function ChatInterface() {
 
         {/* Error Alert */}
         {error && (
-          <Alert variant="destructive" className="mb-4">
+          <Alert variant="destructive" className="mb-4 bg-red-950 border-red-800">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
         {/* Chat Area */}
-        <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+        <Card className="bg-gray-800 border-gray-700">
           <CardContent className="p-0">
             {/* Messages */}
-            <ScrollArea className="h-[60vh] p-4">
+            <ScrollArea className="h-[65vh] p-4">
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center">
-                  <div className="p-4 rounded-full bg-purple-100 dark:bg-purple-900 mb-4">
-                    <Shield className="text-purple-500" size={48} />
+                  <div className="p-4 rounded-full bg-gray-700 mb-4">
+                    <Shield className="text-gray-400" size={40} />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Merhaba! 👋
+                  <h3 className="text-lg font-medium text-gray-200 mb-2">
+                    Welcome to HR Guard
                   </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 max-w-md">
-                    Ben HR Guard asistanıyım. Size izinler, ofis kuralları, yan
-                    haklar ve çalışma politikaları hakkında yardımcı olabilirim.
+                  <p className="text-sm text-gray-400 max-w-md mb-6">
+                    Ask me about policies, benefits, work guidelines, and more.
                   </p>
-                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                    <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg text-left">
-                      <p className="font-semibold text-blue-700 dark:text-blue-300 mb-1">
-                        ✅ Sorabilirsiniz:
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs max-w-lg">
+                    <div className="p-3 bg-gray-700 rounded-lg text-left border border-gray-600">
+                      <p className="font-medium text-gray-300 mb-2">
+                        ✓ You can ask:
                       </p>
-                      <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>• İzin politikası nedir?</li>
-                        <li>• Uzaktan çalışma kuralları</li>
-                        <li>• Yemek kartı bilgileri</li>
+                      <ul className="text-gray-400 space-y-1">
+                        <li>• Leave policy</li>
+                        <li>• Remote work rules</li>
+                        <li>• Meal card benefits</li>
                       </ul>
                     </div>
-                    <div className="p-3 bg-red-50 dark:bg-red-950 rounded-lg text-left">
-                      <p className="font-semibold text-red-700 dark:text-red-300 mb-1">
-                        🚫 Sorulamaz:
+                    <div className="p-3 bg-gray-700 rounded-lg text-left border border-gray-600">
+                      <p className="font-medium text-gray-300 mb-2">
+                        ✗ Restricted topics:
                       </p>
-                      <ul className="text-gray-600 dark:text-gray-400 space-y-1">
-                        <li>• Maaş bilgileri</li>
-                        <li>• Tazminat detayları</li>
-                        <li>• Finansal veriler</li>
+                      <ul className="text-gray-400 space-y-1">
+                        <li>• Salary information</li>
+                        <li>• Compensation details</li>
+                        <li>• Financial data</li>
                       </ul>
                     </div>
                   </div>
@@ -209,7 +217,7 @@ export default function ChatInterface() {
             </ScrollArea>
 
             {/* Input */}
-            <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+            <div className="border-t border-gray-700 p-4">
               <ChatInput
                 onSendMessage={handleSendMessage}
                 disabled={!sessionId}
@@ -219,9 +227,8 @@ export default function ChatInterface() {
         </Card>
 
         {/* Footer */}
-        <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-4">
-          🔒 Bu sistem NeMo Guardrails ile korunmaktadır. Tüm konuşmalar
-          güvenlik kontrolünden geçer.
+        <p className="text-center text-xs text-gray-500 mt-4">
+          🔒 Protected by NeMo Guardrails - All conversations are monitored for security
         </p>
       </div>
     </div>
