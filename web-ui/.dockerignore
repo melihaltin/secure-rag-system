@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+build
+dist
+.swc
+.git
+.gitignore
+.DS_Store
+.idea
+.vscode
+*.log
+README.md
+*.md

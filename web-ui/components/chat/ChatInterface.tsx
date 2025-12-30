@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
@@ -18,7 +18,8 @@ import SessionInfo from "./SessionInfo";
 import { chatAPI } from "@/lib/api";
 import type { Message } from "@/types/chat";
 
-export default function ChatInterface() {
+// Separate the component that uses useSearchParams
+function ChatInterfaceContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session");
@@ -253,5 +254,27 @@ export default function ChatInterface() {
         </p>
       </div>
     </div>
+  );
+}
+
+// Export wrapped component with Suspense boundary
+export default function ChatInterface() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-screen bg-gray-900">
+          <Card className="w-full max-w-md p-8 bg-gray-800 border-gray-700">
+            <div className="flex flex-col items-center gap-4">
+              <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
+              <p className="text-lg font-medium text-gray-300">
+                Loading HR Guard...
+              </p>
+            </div>
+          </Card>
+        </div>
+      }
+    >
+      <ChatInterfaceContent />
+    </Suspense>
   );
 }

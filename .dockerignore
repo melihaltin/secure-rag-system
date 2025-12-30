@@ -1,0 +1,35 @@
+# Backend
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+venv/
+env/
+.venv
+.env
+.env.local
+.env.*.local
+
+# Frontend
+node_modules/
+.next/
+out/
+build/
+dist/
+.swc/
+
+# General
+.git
+.gitignore
+.DS_Store
+.idea
+.vscode
+*.log
+logs/
+sessions/
+
+# Documentation
+README.md
+*.md

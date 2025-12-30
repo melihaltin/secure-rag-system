@@ -1,0 +1,36 @@
+# Backend - Python FastAPI
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy requirements first (for better caching)
+COPY requirements.txt . 
+
+# Try to use pre-built wheels first, install build tools only if needed
+RUN pip install --upgrade pip && \
+    pip install -r requirements. txt || \
+    (apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    build-essential \
+    python3-dev \
+    && pip install -r requirements.txt \
+    && apt-get remove -y gcc g++ build-essential python3-dev \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*)
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p logs sessions
+
+# Expose port
+EXPOSE 8000
+
+# Health check - using Python's built-in urllib
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/').read()" || exit 1
+
+# Run the application
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
