@@ -22,8 +22,9 @@ RUN pip install --upgrade pip && \
 # Copy application code
 COPY . .
 
-# Create necessary directories
-RUN mkdir -p logs sessions
+# Create necessary directories with proper permissions
+RUN mkdir -p logs sessions chroma_db && \
+    chmod -R 777 logs sessions chroma_db
 
 # Expose port
 EXPOSE 8000
