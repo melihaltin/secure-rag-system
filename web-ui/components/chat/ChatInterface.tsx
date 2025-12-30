@@ -40,9 +40,26 @@ export default function ChatInterface() {
     if (!sessionId) {
       createNewSession();
     } else {
-      setIsLoading(false);
+      // Load chat history if session exists in URL
+      loadChatHistory(sessionId);
     }
   }, []);
+
+  const loadChatHistory = async (sessionId: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const history = await chatAPI.getChatHistory(sessionId);
+      setMessages(history);
+      console.log("✅ Chat history loaded:", history.length, "messages");
+    } catch (err) {
+      console.error("Failed to load chat history:", err);
+      setError("Failed to load chat history. Starting fresh.");
+      setMessages([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const createNewSession = async () => {
     setIsLoading(true);
