@@ -22,7 +22,7 @@ jobs:
             # --- BURAYI KENDİ KLASÖR ADINA GÖRE DÜZENLE ---
             # Sunucuda projeyi hangi klasöre clone'ladıysan onu yaz.
             # Örn: git clone ... yaptıktan sonra oluşan klasör adı.
-            cd secure-rag-project 
+            cd secure-rag-system
 
             # 1. Kodları eşitle (Agresif mod)
             git fetch --all
