@@ -33,5 +33,15 @@ jobs:
             # --force-recreate: Ayar değişmese bile baştan oluştur (Garanti olsun)
             docker compose up -d --build --force-recreate
 
-            # 3. Temizlik (Disk dolmasın)
-            docker image prune -f
+
+
+            # b) Eğer diskte yer çok azsa, kullanılmayan TÜM imajları sil (sadece çalışan kalsın)
+            # Bu komut şu an çalışan (Up) haricindeki her şeyi siler.
+            # DİKKAT: -a parametresi "all" demektir.
+            docker image prune -a -f
+
+            # c) Build Cache'i SİLME! (Builder prune yapma)
+            # 1GB sunucuda cache hayat kurtarır.
+
+            # d) Disk durumunu loglara yaz (Görmek için)
+            df -h

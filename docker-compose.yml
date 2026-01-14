@@ -26,31 +26,6 @@ services:
       retries: 3
       start_period: 40s
 
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
-      args:
-        - NEXT_PUBLIC_API_URL=https://secure-rag.melih.app/api
-    container_name: hr-guard-frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=https://secure-rag.melih.app/api
-      - HOSTNAME=0.0.0.0
-      - PORT=3000
-    depends_on:
-      backend:
-        condition: service_healthy
-    networks:
-      - hr-guard-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/"]
-      interval: 60s
-      timeout: 30s
-      retries: 3
-      start_period: 120s
 
 networks:
   hr-guard-network:
