@@ -1,36 +1,13 @@
-define user express_greeting
-  "merhaba"
-  "selam"
-  "hi"
-
-define user express_goodbye
-  "güle güle"
-  "bye"
-  "çıkış"
-
-define bot greet
-  "Merhaba! Ben TechFlow İK asistanıyım. Size nasıl yardımcı olabilirim?"
-
-define bot say_goodbye
-  "İyi çalışmalar dilerim!"
-
 define bot refuse_blocked_input
-  "⚠️ GÜVENLİK UYARISI: Maaş ve finansal veriler gizlidir ve paylaşılamaz."
+  "⚠️ SECURITY WARNING: Salary and financial data are confidential and cannot be shared."
 
 define bot refuse_blocked_output
-  "🚫 GÜVENLİK UYARISI: Sistem hassas veri (maaş bilgisi) tespit etti ve yanıtı engelledi."
+  "🚫 SECURITY WARNING: The system detected sensitive data (salary information) and blocked the response."
 
 # ============================================
 # AKIŞLAR
 # ============================================
 
-define flow greeting
-  user express_greeting
-  bot greet
-
-define flow goodbye
-  user express_goodbye
-  bot say_goodbye
 
 # ANA SORU-CEVAP AKIŞI
 define flow answer_question
