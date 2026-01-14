@@ -6,19 +6,26 @@ WORKDIR /app
 # Copy requirements first (for better caching)
 COPY requirements.txt . 
 
+
+RUN mkdir -p /app/tmp
+
+# 2. Ortam değişkeni ile pip'e "Burası senin çöplüğün" diyoruz
+ENV TMPDIR=/app/tmp
+
 # Try to use pre-built wheels first, install build tools only if needed
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt || \
-    (apt-get update && apt-get install -y \
+RUN pip install --upgrade pip --no-cache-dir && \
+    (pip install --no-cache-dir -r requirements.txt || \
+    (apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     g++ \
     build-essential \
     python3-dev \
     && pip install --no-cache-dir -r requirements.txt \
-    && pip install -r requirements.txt \
     && apt-get remove -y gcc g++ build-essential python3-dev \
     && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/*)
+    && rm -rf /var/lib/apt/lists/*)) && \
+    # İş bitince geçici klasörü temizle
+    rm -rf /app/tmp
 
 # Copy application code
 COPY . .
