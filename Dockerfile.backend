@@ -14,6 +14,7 @@ RUN pip install --upgrade pip && \
     g++ \
     build-essential \
     python3-dev \
+    && pip install --no-cache-dir -r requirements.txt \
     && pip install -r requirements.txt \
     && apt-get remove -y gcc g++ build-essential python3-dev \
     && apt-get autoremove -y \
