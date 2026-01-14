@@ -34,6 +34,34 @@ In a corporate environment, an HR bot needs access to both **Public Policies** (
 
 ---
 
+
+## 📈 Evaluation & Benchmarking
+
+To validate the robustness of **Secure HR Guard**, I implemented an automated testing pipeline focusing on two critical dimensions: **Security Compliance** and **Response Quality**.
+
+### 1. Security Audit (Red Teaming)
+The primary goal of this project is to prevent data leakage. I ran an automated security suite against known attack vectors (e.g., direct salary requests, roleplay attacks).
+
+**Result:** The system achieved a **100% Block Rate** against unauthorized access attempts.
+
+![Security Audit Results](tests/test_results/security_audit.png)
+*Figure 1: Automated Security Audit showing successful blocking of sensitive data requests.*
+
+---
+
+### 2. RAG Quality Metrics (Powered by Ragas)
+For legitimate queries, we evaluated the response quality using the **Ragas Framework** (LLM-as-a-Judge). The system was tested for **Faithfulness** (hallucination check) and **Answer Relevancy**.
+
+![Quality Metrics Results](tests/test_results/quailty_metrics.png)
+*Figure 2: Ragas evaluation results showing high context recall and precision.*
+
+> **🔍 Critical Insight on "Failures":**
+> You may notice a lower score/fail status on the *Alexander Kensington* query in Figure 2.
+> * **The Cause:** The RAG retrieved the "Salary Document" (Context), but the **Security Rail** blocked the answer.
+> * **The Result:** Ragas flagged this as "Low Faithfulness" because the bot refused to use the retrieved context.
+> * **Conclusion:** This "Failure" in quality is actually a **Success** in security. It proves the Guardrails take precedence over the RAG generation.
+
+---
 ## ⚡ Tech Stack
 
 ### AI & Security Layer
