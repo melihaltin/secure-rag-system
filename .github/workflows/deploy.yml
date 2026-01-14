@@ -31,7 +31,7 @@ jobs:
             # 2. Docker'ı yeniden inşa et ve başlat
             # --build: Kod değiştiği için yeniden derle
             # --force-recreate: Ayar değişmese bile baştan oluştur (Garanti olsun)
-            docker-compose up -d --build --force-recreate
+            docker compose up -d --build --force-recreate
 
             # 3. Temizlik (Disk dolmasın)
             docker image prune -f

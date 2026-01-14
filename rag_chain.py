@@ -1,7 +1,8 @@
 import os
 from langchain_community.document_loaders import TextLoader, DirectoryLoader
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.vectorstores import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import (
     CharacterTextSplitter,
     RecursiveCharacterTextSplitter,
@@ -100,7 +101,7 @@ def create_vector_db():
     print(f"   ✅ {len(texts)} parçaya bölündü")
 
     # Embedding oluştur
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
     # Vektör veritabanını oluştur ve kaydet
     db = Chroma.from_documents(texts, embeddings, persist_directory=PERSIST_DIRECTORY)
@@ -126,7 +127,7 @@ def get_policy_override(query: str) -> str | None:
 
 def load_vector_db():
     """Mevcut vektör veritabanını yükler"""
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
     db = Chroma(persist_directory=PERSIST_DIRECTORY, embedding_function=embeddings)
 
