@@ -8,7 +8,7 @@ COPY requirements.txt .
 
 # Try to use pre-built wheels first, install build tools only if needed
 RUN pip install --upgrade pip && \
-    pip install -r requirements. txt || \
+    pip install -r requirements.txt || \
     (apt-get update && apt-get install -y \
     gcc \
     g++ \

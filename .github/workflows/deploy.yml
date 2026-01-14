@@ -1,0 +1,37 @@
+name: Deploy Secure RAG App
+
+on:
+  push:
+    branches:
+      - main # Hangi dala pushlayınca çalışsın?
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            set -e  # Hata olursa dur
+
+            # --- BURAYI KENDİ KLASÖR ADINA GÖRE DÜZENLE ---
+            # Sunucuda projeyi hangi klasöre clone'ladıysan onu yaz.
+            # Örn: git clone ... yaptıktan sonra oluşan klasör adı.
+            cd secure-rag-project 
+
+            # 1. Kodları eşitle (Agresif mod)
+            git fetch --all
+            git reset --hard origin/main
+
+            # 2. Docker'ı yeniden inşa et ve başlat
+            # --build: Kod değiştiği için yeniden derle
+            # --force-recreate: Ayar değişmese bile baştan oluştur (Garanti olsun)
+            docker-compose up -d --build --force-recreate
+
+            # 3. Temizlik (Disk dolmasın)
+            docker image prune -f

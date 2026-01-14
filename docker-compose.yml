@@ -31,12 +31,12 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
       args:
-        - NEXT_PUBLIC_API_URL=http://159.65.124.119:8000
+        - NEXT_PUBLIC_API_URL=https://secure-rag.melih.app/api
     container_name: hr-guard-frontend
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://159.65.124.119:8000
+      - NEXT_PUBLIC_API_URL=https://secure-rag.melih.app/api
       - HOSTNAME=0.0.0.0
       - PORT=3000
     depends_on:
